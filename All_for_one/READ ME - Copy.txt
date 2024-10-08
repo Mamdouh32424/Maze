@@ -1,0 +1,82 @@
+ORDER TO READ THE CODE
+numbers 
+2
+3
+4
+5
+6
+7
+8
+e3del 
+96
+97
+
+
+the ones left are 
+All ,Mapp, Next , All_for_one  // read them in this order too
+I'll try and explain them here
+
+
+All for one is a bfs ( try watching vids explaining it or sth , lw mafhemtesh i'll explain it to you )
+bfs is used to get the shortest path to something (number of moves)
+but in our case we want to know how to get there too
+and if we made it return the all the moves to get the the unvisited tile it'll be memory costly.
+so i made it return just the next move.
+and then we made it prioriteze the right of the robot ( making it wall follow) 
+this makes it work like dfs(another algorithm) not bfs which would've been simpler to write mn el awel w 5alas bas I realized this after i already
+wrote it fa kaselt akteb el code mn el awel
+
+
+The maze is  represented in the 2D arrray of bytes state ( wierd name idk what was going through my head ,"tile" would've been better)
+each byte is a tile , and each bit representes sth
+one for if there is a wall infront/behind/right/left of us
+one for if the tile is visited
+one for if the tile is unvisited (will explain the difference)
+one for black tile 
+one for checkpoint(useless)
+
+   0    0     0    0    0     0     0     0
+   l    f     r    b   uv   black   c     v
+
+
+when we're saving the wall info in the array  we can't just take it from the robot and put it in the array
+cause the info will differ depending on the direction the robot is facing and it'll ruin our algorithm
+so we use the orientation variable 
+//  0 -> Front ,  1 -> Right , 2 -> Back , 3 -> Left
+when we get the wall info we change them to what it would be in orientation 0
+
+
+when we bfs mn tile (x,y) we'll check state[x][y] to see if we can go to the neighbouring tiles (if there is a wall/black then we can't )
+we're looking for a tile (i,j) were state[i][j] has the visited bit == 0 (meaning we haven't visited it before)
+
+when we visit all tiles and go back to the start we get extra pts
+so here is where we use the unvisited bit
+
+we have an int unvisited which is equal to the number of unvisited tile ( the ones we know we can get to)
+so when its  equal to zero we konw to  go the the start.
+so how i did this is by 
+1)when we're in a new tile unvisited +=  the number of tiles we can get to
+2) unvisited -= 1 (bec the one we're in rn was unvisted)
+but there was a prob with that because we could count a tile more than once
+so we use the unvisited bit to mark that we counted it as unvisited so we don't count it twice.
+
+i just did a physics quiz so i forgot what else i wanted to write.
+
+
+All .ino :
+calls mapp , cam, and every other sensor  (when we had the heat sensor but now its just these 2 )
+
+Mapp.ino :
+gets the readings from the tofs and puts the wall info in the array
+
+Next.ino : 
+calls the bfs in All_for_one and takes care of the movement
+
+All_for_one:
+has the bfs function and other orientation functions and functions used in the bfs
+
+P.S. 
+read the code from bottom to top 
+because in c++ (not here but i'm used to it)
+you can't call a funtion unless its written before the call
+
